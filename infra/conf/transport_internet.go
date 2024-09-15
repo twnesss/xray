@@ -390,6 +390,7 @@ type TLSConfig struct {
 	PinnedPeerCertificatePublicKeySha256 *[]string        `json:"pinnedPeerCertificatePublicKeySha256"`
 	MasterKeyLog                         string           `json:"masterKeyLog"`
 	ECHConfig                            string           `json:"echConfig"`
+	ECHDOHServer                         string           `json:"echDohServer"`
 }
 
 // Build implements Buildable.
@@ -446,6 +447,7 @@ func (c *TLSConfig) Build() (proto.Message, error) {
 
 	config.MasterKeyLog = c.MasterKeyLog
 	config.EchConfig = c.ECHConfig
+	config.Ech_DOHserver = c.ECHDOHServer
 
 	return config, nil
 }
@@ -759,19 +761,19 @@ func (c *SocketConfig) Build() (*internet.SocketConfig, error) {
 }
 
 type StreamConfig struct {
-	Network             *TransportProtocol  `json:"network"`
-	Security            string              `json:"security"`
-	TLSSettings         *TLSConfig          `json:"tlsSettings"`
-	REALITYSettings     *REALITYConfig      `json:"realitySettings"`
-	TCPSettings         *TCPConfig          `json:"tcpSettings"`
-	KCPSettings         *KCPConfig          `json:"kcpSettings"`
-	WSSettings          *WebSocketConfig    `json:"wsSettings"`
-	HTTPSettings        *HTTPConfig         `json:"httpSettings"`
-	SocketSettings      *SocketConfig       `json:"sockopt"`
-	GRPCConfig          *GRPCConfig         `json:"grpcSettings"`
-	GUNConfig           *GRPCConfig         `json:"gunSettings"`
-	HTTPUPGRADESettings *HttpUpgradeConfig  `json:"httpupgradeSettings"`
-	SplitHTTPSettings   *SplitHTTPConfig    `json:"splithttpSettings"`
+	Network             *TransportProtocol `json:"network"`
+	Security            string             `json:"security"`
+	TLSSettings         *TLSConfig         `json:"tlsSettings"`
+	REALITYSettings     *REALITYConfig     `json:"realitySettings"`
+	TCPSettings         *TCPConfig         `json:"tcpSettings"`
+	KCPSettings         *KCPConfig         `json:"kcpSettings"`
+	WSSettings          *WebSocketConfig   `json:"wsSettings"`
+	HTTPSettings        *HTTPConfig        `json:"httpSettings"`
+	SocketSettings      *SocketConfig      `json:"sockopt"`
+	GRPCConfig          *GRPCConfig        `json:"grpcSettings"`
+	GUNConfig           *GRPCConfig        `json:"gunSettings"`
+	HTTPUPGRADESettings *HttpUpgradeConfig `json:"httpupgradeSettings"`
+	SplitHTTPSettings   *SplitHTTPConfig   `json:"splithttpSettings"`
 }
 
 // Build implements Buildable.
