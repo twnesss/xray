@@ -391,11 +391,10 @@ func (c *Config) GetTLSConfig(opts ...Option) *tls.Config {
 		}
 	}
 	if len(c.EchConfig) > 0 {
-		ECHConfig, err := base64.StdEncoding.DecodeString(c.EchConfig)
+		err := ApplyECH(c, config)
 		if err != nil {
-			errors.LogError(context.Background(), "invalid ECH config")
+			errors.LogError(context.Background(), err)
 		}
-		config.EncryptedClientHelloConfigList = ECHConfig
 	}
 
 	return config
