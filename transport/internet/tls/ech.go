@@ -52,18 +52,19 @@ var (
 )
 
 func QueryRecord(domain string, server string) (string, error) {
-	mutex.RLock()
-	defer mutex.RUnlock()
 	rec, found := dnsCache[domain]
 	if found && rec.expire.After(time.Now()) {
-		return "", nil
+		return rec.record, nil
 	}
+	mutex.Lock()
+	defer mutex.Unlock()
 	record, err := dohQuery(server, domain)
 	if err != nil {
 		return "", err
 	}
 	rec.record = record
 	rec.expire = time.Now().Add(time.Second * 600)
+	dnsCache[domain] = rec
 	return record, nil
 }
 
