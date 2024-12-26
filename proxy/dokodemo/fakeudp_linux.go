@@ -61,7 +61,30 @@ func FakeUDP(addr *net.UDPAddr, mark int) (net.PacketConn, error) {
 	if err != nil {
 		syscall.Close(fd)
 		return nil, &net.OpError{Op: "fake", Err: fmt.Errorf("convert file descriptor to connection: %s", err)}
+		packetConn = &fakeUDPPacketConnWrapper{
+			PacketConn: packetConn,
+			fd:         fd,
+		}
+	
+		return packetConn, nil
 	}
-
-	return packetConn, nil
-}
+	
+	// packetConn created by net.FilePacketConn(fdFile) will not close fd when packetConn.Close() is called
+	// So wrap it Close() method to make it close fd when packetConn.Close() is called
+	// Still need more test
+	type fakeUDPPacketConnWrapper struct {
+		fd int
+		net.PacketConn
+	}
+	
+	func (c *fakeUDPPacketConnWrapper) Close() error {
+		err1 := c.PacketConn.Close()
+		err2 := syscall.Close(c.fd)
+		if err1 != nil {
+			return err1
+		}
+		if err2 != nil {
+			return err2
+		}
+		return nil
+	}
