@@ -34,8 +34,6 @@ require (
 	lukechampine.com/blake3 v1.3.0
 )
 
-replace github.com/gorilla/websocket => github.com/twnesss/websocket v1.5.4-beta.1
-
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
